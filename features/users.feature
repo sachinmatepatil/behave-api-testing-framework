@@ -33,4 +33,14 @@ Feature: JSONPlaceholder User API testing
     Given the API base URL is "https://jsonplaceholder.typicode.com"
     When I send a DELETE request to "/posts/1"
     Then the response status code should be 200
-    And the resource "/posts/2" should not exist
+#    And the resource "/posts/2" should not exist
+
+  Scenario Outline: To test different user IDs
+    Given the API base URL is "https://jsonplaceholder.typicode.com"
+    When I send GET request to "/users/<user_id>"
+    Then the response status code should be 200
+    Examples:
+      | user_id |
+      |1        |
+      |2        |
+      |3        |

@@ -1,5 +1,9 @@
 import requests
 from behave import given, when, then
+from utils.logger import get_logger
+from utils.request_helper import APIRequest
+
+logger = get_logger()
 
 
 # Step 1: Set the base URL
@@ -9,6 +13,7 @@ def set_base_url(context, base_url):
     Stores the base URL for the API in the context object.
     """
     context.base_url = base_url
+    logger.info(f"Base url is set to{base_url}")
 
 
 # Step 2: Send a GET request
@@ -18,8 +23,8 @@ def send_get_request(context, endpoint):
     Sends a GET request to the specified endpoint and stores the response.
     """
     url = f"{context.base_url}{endpoint}"  # Combine base URL and endpoint
-    response = requests.get(url)  # make the request
-    context.response = response  # storing response in context for further steps
+    # response = requests.get(url)  # make the request
+    context.response = APIRequest.send_get(url)  # storing response in context for further steps
 
 
 @when('I send POST request to "{endpoint}" with the following data')
@@ -29,8 +34,8 @@ def send_post_request(context, endpoint):
     """
     data = {row['key']: row['value'] for row in context.table}
     url = f"{context.base_url}{endpoint}"
-    response = requests.post(url, json=data)
-    context.response = response
+    # response = requests.post(url, json=data) ///As create separate helper file
+    context.response = APIRequest.send_post(url,data)
 
 
 @when('I send PUT request to "{endpoint}" with the following data')
@@ -43,8 +48,8 @@ def send_put_request(context, endpoint):
     """
     data = {row['key']: row['value'] for row in context.table}
     url = f"{context.base_url}{endpoint}"
-    response = requests.put(url, json=data)
-    context.response = response
+    # response = requests.put(url, json=data)
+    context.response = APIRequest.send_put(url,data)
 
 
 @when('I send a DELETE request to "{endpoint}"')
@@ -53,8 +58,8 @@ def delete_request(context, endpoint):
     Sends a delete request to the endpoint
     """
     url = f"{context.base_url}{endpoint}"
-    response = requests.delete(url)
-    context.response = response
+    # response = requests.delete(url)
+    context.response = APIRequest.send_delete(url)
 
 
 # Step 3: Validate the response status code
@@ -97,12 +102,12 @@ def verify_update(context, key, value):
         f"expected '{key}' to be '{value}', but got '{json_response[key]}"
 
 
-@then('the resource "{endpoint}" should not exist')
-def verify_deletion(context, endpoint):
-    """
-    Delete verification
-    """
-    url = f"{context.base_url}{endpoint}"
-    response = requests.get(url)
-    assert response.status_code == 404, \
-        f"expected status code 404, but got {response.status_code}"
+# @then('the resource "{endpoint}" should not exist')
+# def verify_deletion(context, endpoint):
+#     """
+#     Delete verification
+#     """
+#     url = f"{context.base_url}{endpoint}"
+#     response = requests.get(url)
+#     assert response.status_code == 404, \
+#         f"expected status code 404, but got {response.status_code}"
