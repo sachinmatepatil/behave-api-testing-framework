@@ -1,14 +1,21 @@
-import requests
+import os
 from behave import given, when, then
 from utils.logger import get_logger
 from utils.request_helper import APIRequest
+from dotenv import load_dotenv
+
+# load the .env file
+load_dotenv()
+
+# Access environment variables
+base_url = os.getenv("BASE_URL")
 
 logger = get_logger()
 
 
 # Step 1: Set the base URL
-@given('the API base URL is "{base_url}"')
-def set_base_url(context, base_url):
+@given('the API base URL is SET')
+def set_base_url(context):
     """
     Stores the base URL for the API in the context object.
     """
