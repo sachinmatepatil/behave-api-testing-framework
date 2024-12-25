@@ -1,0 +1,4 @@
+behave==1.2.6  # Core framework for Behavior-Driven Development (BDD)
+requests==2.31.0  # For making API requests
+allure-behave==2.8.34  # For generating Allure reports
+python-dotenv==1.0.0  # For managing environment variables
