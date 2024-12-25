@@ -10,6 +10,7 @@ load_dotenv()
 # Access environment variables
 base_url = os.getenv("BASE_URL")
 
+# Access the logger
 logger = get_logger()
 
 
